@@ -1,17 +1,8 @@
 @model IEnumerable<ScheduleApp.Models.Assignment>
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Завдання";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Завдання</title>
-</head>
-<body>
 
 @if (ViewBag.SubjectId == null)
 {
@@ -62,5 +53,3 @@ else
 }
     </tbody>
 </table>
-</body>
-</html>
