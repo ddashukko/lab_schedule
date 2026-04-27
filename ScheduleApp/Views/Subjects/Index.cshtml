@@ -1,48 +1,32 @@
 @model IEnumerable<ScheduleApp.Models.Subject>
-
-@{
-    ViewData["Title"] = "Предмети";
-}
-
-<h1>Предмети</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ColorCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ColorCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SubjectId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SubjectId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SubjectId">Delete</a> |
-                <a asp-controller="Assignments" asp-action="Index" asp-route-id="@item.SubjectId" asp-route-name="@item.Name">Завдання</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">📚 Список предметів</h2>
+        <a asp-action="Create" class="btn btn-success btn-sm">+ Додати</a>
+    </div>
+    <div class="card shadow-sm border-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Колір</th>
+                    <th>Назва предмету</th>
+                    <th class="text-end">Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td style="width: 80px;">
+                            <div class="rounded shadow-sm" style="width: 40px; height: 20px; background-color: @item.ColorCode;"></div>
+                        </td>
+                        <td class="fw-bold">@item.Name</td>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-id="@item.SubjectId" class="btn btn-sm btn-outline-warning">Редагувати</a>
+                            <a asp-action="Delete" asp-route-id="@item.SubjectId" class="btn btn-sm btn-outline-danger">Видалити</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

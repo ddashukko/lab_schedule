@@ -8,8 +8,14 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  box-shadow:
+    0 0 0 0.1rem white,
+    0 0 0 0.25rem #258cfb;
 }
 
 html {
@@ -21,11 +27,142 @@ body {
   margin-bottom: 60px;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+/* ПОВЕРНЕННЯ ДО НОРМАЛЬНОГО ЖИТТЯ */
+html {
+  font-size: 16px; /* Стандарт */
+}
+
+body {
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+.container,
+.container-fluid {
+  max-width: 1200px !important; /* Нормальна ширина для монітора */
+  padding: 0 15px !important;
+}
+
+/* Картки розкладу — робимо їх акуратними */
+.schedule-card {
+  min-height: 60px !important;
+  padding: 10px 12px !important;
+  margin-bottom: 5px !important;
+  border-radius: 6px !important;
+  font-size: 0.9rem !important;
+}
+
+.subject-name {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.teacher-name {
+  font-size: 0.85rem !important;
+}
+
+/* Кнопки — звичайний розмір */
+.btn-lg {
+  padding: 10px 20px !important;
+  font-size: 1.1rem !important;
+  border-radius: 8px !important;
+}
+
+/* Таблиці — компактні */
+.table th,
+.table td {
+  padding: 12px 15px !important;
+  font-size: 1rem !important;
+}
+
+/* Заголовки */
+h1,
+.display-1 {
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Форми */
+.form-control-lg,
+.form-select-lg {
+  font-size: 1rem !important;
+  padding: 10px 15px !important;
+  border-radius: 8px !important;
+}
+
+body {
+  background-color: #f8f9fa;
+  font-family:
+    "Inter",
+    -apple-system,
+    sans-serif;
+}
+
+.container {
+  max-width: 1100px !important;
+}
+
+/* Картки предметів та викладачів */
+.custom-card {
+  background: white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  height: 100%;
+}
+
+.custom-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-accent {
+  height: 6px;
+  border-radius: 12px 12px 0 0;
+}
+
+.btn-actions {
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
+
+/* Стиль для діаграм */
+#chart_div,
+#month_chart_div {
+  width: 100%;
+  min-height: 400px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Статистика */
+#chart_div,
+#month_chart_div {
+  min-height: 400px;
+}
+
+.rounded-4 {
+  border-radius: 1rem !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }

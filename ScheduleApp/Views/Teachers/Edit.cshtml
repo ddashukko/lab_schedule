@@ -1,0 +1,33 @@
+@model ScheduleApp.Models.Teacher
+
+@{
+    ViewData["Title"] = "Редагування";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-5">
+        <div class="card-header bg-warning p-5 rounded-top-5">
+            <h1 class="display-3 fw-bold mb-0">✏️ Редагувати профіль</h1>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="TeacherId" />
+                
+                <div class="mb-5">
+                    <label asp-for="FullName" class="h1 fw-bold mb-3">ПІБ</label>
+                    <input asp-for="FullName" class="form-control form-control-lg py-4 fs-2 shadow-sm" />
+                </div>
+
+                <div class="mb-5">
+                    <label asp-for="Link" class="h1 fw-bold mb-3">Посилання</label>
+                    <input asp-for="Link" class="form-control form-control-lg py-4 fs-2 shadow-sm" />
+                </div>
+
+                <div class="d-flex justify-content-between mt-5 pt-5 border-top">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5 py-4 fs-2 rounded-4">Назад</a>
+                    <button type="submit" class="btn btn-warning btn-lg px-5 py-4 fs-2 fw-bold rounded-4 shadow">Оновити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,53 +1,39 @@
 @model ScheduleApp.Models.Assignment
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Редагування завдання";
 }
 
-<!DOCTYPE html>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-5">
+        <div class="card-header bg-warning p-5 rounded-top-5">
+            <h1 class="display-3 fw-bold mb-0">✏️ Редагувати завдання</h1>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger h3"></div>
+                <input type="hidden" asp-for="TaskId" />
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
+                <div class="mb-5">
+                    <label asp-for="SubjectId" class="h1 fw-bold mb-3">Предмет</label>
+                    <select asp-for="SubjectId" class="form-select form-select-lg py-4 fs-2 shadow-sm" asp-items="ViewBag.SubjectId"></select>
+                </div>
 
-<h4>Assignment</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TaskId" />
-            <div class="form-group">
-                <label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>
-                <span asp-validation-for="SubjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Deadline" class="control-label"></label>
-                <input asp-for="Deadline" class="form-control" />
-                <span asp-validation-for="Deadline" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="mb-5">
+                    <label asp-for="Description" class="h1 fw-bold mb-3">Опис завдання</label>
+                    <textarea asp-for="Description" class="form-control form-control-lg py-4 fs-2 shadow-sm" rows="4"></textarea>
+                </div>
+
+                <div class="mb-5">
+                    <label asp-for="Deadline" class="h1 fw-bold mb-3">Дедлайн</label>
+                    <input asp-for="Deadline" class="form-control form-control-lg py-4 fs-2 shadow-sm" type="datetime-local" />
+                </div>
+
+                <div class="d-flex justify-content-between mt-5 pt-5 border-top">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5 py-4 fs-2 rounded-4">Скасувати</a>
+                    <button type="submit" class="btn btn-warning btn-lg px-5 py-4 fs-2 fw-bold rounded-4 shadow">Оновити дані</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-</body>
-</html>

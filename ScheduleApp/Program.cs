@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ScheduleApp.Models;
+using ScheduleApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<IsttpContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IDataPortServiceFactory<Subject>, SubjectDataPortServiceFactory>();
 
 var app = builder.Build();
 

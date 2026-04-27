@@ -1,51 +1,35 @@
 @model ScheduleApp.Models.Subject
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Новий предмет";
 }
 
-<!DOCTYPE html>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0" style="border-radius: 20px;">
+        <div class="card-header bg-success text-white p-5" style="border-radius: 20px 20px 0 0;">
+            <h1 class="display-4 fw-bold mb-0">📚 Додати новий предмет</h1>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="mb-5">
+                    <label asp-for="Name" class="h2 fw-bold mb-3">Назва предмета</label>
+                    <input asp-for="Name" class="form-control form-control-lg py-4 shadow-sm" style="font-size: 2rem;" placeholder="Наприклад: Вища математика" />
+                    <span asp-validation-for="Name" class="text-danger h4"></span>
+                </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
-</head>
-<body>
+                <div class="mb-5">
+                    <label asp-for="ColorCode" class="h2 fw-bold mb-3">Колір у розкладі</label>
+                    <input asp-for="ColorCode" type="color" class="form-control form-control-lg py-2 shadow-sm" style="height: 100px;" value="#723793" />
+                    <p class="text-muted mt-2 h4">Оберіть колір, яким цей предмет буде виділятися в сітці</p>
+                </div>
 
-<h4>Subject</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ColorCode" class="control-label"></label>
-                <input asp-for="ColorCode" class="form-control" />
-                <span asp-validation-for="ColorCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="d-flex justify-content-between mt-5 pt-5 border-top">
+                    <button type="button" onclick="window.close()" class="btn btn-outline-secondary btn-lg px-5 py-4 fw-bold" style="font-size: 1.5rem;">Закрити</button>
+                    <button type="submit" class="btn btn-success btn-lg px-5 py-4 fw-bold" style="font-size: 1.5rem;">Зберегти предмет</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-</body>
-</html>

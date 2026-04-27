@@ -1,0 +1,37 @@
+@model ScheduleApp.Models.Teacher
+
+@{
+    ViewData["Title"] = "Новий викладач";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0" style="border-radius: 20px;">
+        <div class="card-header bg-info text-white p-5" style="border-radius: 20px 20px 0 0;">
+            <h1 class="display-4 fw-bold mb-0">👨‍🏫 Додати викладача</h1>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="mb-5">
+                    <label asp-for="FullName" class="h2 fw-bold mb-3">ПІБ Викладача</label>
+                    <input asp-for="FullName" class="form-control form-control-lg py-4 shadow-sm" style="font-size: 2rem;" placeholder="Прізвище Ім'я По батькові" />
+                    <span asp-validation-for="FullName" class="text-danger h4"></span>
+                </div>
+
+                <div class="mb-5">
+                    <label asp-for="Link" class="h2 fw-bold mb-3">
+                        Посилання на Zoom / Teams 
+                        <span class="text-muted fw-normal fs-4">(не обов'язково)</span>
+                    </label>
+                    <input asp-for="Link" class="form-control form-control-lg py-4 shadow-sm" style="font-size: 2rem;" placeholder="https://..." />
+                </div>
+
+                <div class="d-flex justify-content-between mt-5 pt-5 border-top">
+                    <button type="button" onclick="window.close()" class="btn btn-outline-secondary btn-lg px-5 py-4 fw-bold" style="font-size: 1.5rem;">Закрити</button>
+                    <button type="submit" class="btn btn-info text-white btn-lg px-5 py-4 fw-bold" style="font-size: 1.5rem;">Зберегти дані</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

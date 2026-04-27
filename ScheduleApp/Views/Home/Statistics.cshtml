@@ -1,0 +1,93 @@
+@{
+    ViewData["Title"] = "Статистика";
+}
+
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">📊 Аналітика завдань</h2>
+        <p class="text-muted">Статистика по предметах та дедлайнах</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-3 p-4">
+                <h5 class="fw-bold text-center mb-3">Розподіл за предметами</h5>
+                <div id="chart_div" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-3 p-4">
+                <h5 class="fw-bold text-center mb-3">Завдання по місяцях</h5>
+                <div id="month_chart_div" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-5">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Назад до розкладу</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawCharts);
+
+        async function drawCharts() {
+            try {
+                // 1. Дані для предметів (Виправлено шлях: прибрано /api)
+                const resSubj = await fetch('/Charts/AssignmentsBySubject');
+                if (!resSubj.ok) throw new Error('Помилка завантаження предметів');
+                const dataSubj = await resSubj.json();
+                
+                let dataTableSubj = new google.visualization.DataTable();
+                dataTableSubj.addColumn('string', 'Предмет');
+                dataTableSubj.addColumn('number', 'Кількість');
+                
+                dataSubj.forEach(item => {
+                    dataTableSubj.addRow([item.subjectName, item.count]);
+                });
+
+                const pieOptions = {
+                    pieHole: 0.4,
+                    colors: ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6610f2'],
+                    chartArea: { width: '100%', height: '80%' },
+                    legend: { position: 'bottom' }
+                };
+
+                new google.visualization.PieChart(document.getElementById('chart_div')).draw(dataTableSubj, pieOptions);
+
+                // 2. Дані для місяців (Виправлено шлях: прибрано /api)
+                const resMonth = await fetch('/Charts/AssignmentsByMonth');
+                if (!resMonth.ok) throw new Error('Помилка завантаження місяців');
+                const dataMonth = await resMonth.json();
+
+                let dataTableMonth = new google.visualization.DataTable();
+                dataTableMonth.addColumn('string', 'Місяць');
+                dataTableMonth.addColumn('number', 'Завдання');
+                
+                dataMonth.forEach(item => {
+                    dataTableMonth.addRow([item.monthName, item.count]);
+                });
+
+                const barOptions = {
+                    legend: 'none',
+                    colors: ['#0d6efd'],
+                    chartArea: { width: '80%', height: '70%' },
+                    vAxis: { minValue: 0, gridlines: { count: 4 } },
+                    hAxis: { slantedText: true }
+                };
+
+                new google.visualization.ColumnChart(document.getElementById('month_chart_div')).draw(dataTableMonth, barOptions);
+
+            } catch (error) {
+                console.error("Помилка завантаження діаграм:", error);
+                document.querySelectorAll('[id*="chart_div"]').forEach(el => {
+                    el.innerHTML = '<div class="alert alert-warning m-3">Не вдалося завантажити дані для діаграми</div>';
+                });
+            }
+        }
+    </script>
+}

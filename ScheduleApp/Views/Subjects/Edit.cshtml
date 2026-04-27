@@ -1,53 +1,33 @@
 @model ScheduleApp.Models.Subject
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Редагування предмета";
 }
 
-<!DOCTYPE html>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-5">
+        <div class="card-header bg-warning p-5 rounded-top-5">
+            <h1 class="display-3 fw-bold mb-0">✏️ Редагувати: @Model.Name</h1>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="SubjectId" />
+                
+                <div class="mb-5">
+                    <label asp-for="Name" class="h1 fw-bold mb-3">Назва</label>
+                    <input asp-for="Name" class="form-control form-control-lg py-4 fs-1 shadow-sm" />
+                </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
+                <div class="mb-5">
+                    <label asp-for="ColorCode" class="h1 fw-bold mb-3">Колір</label>
+                    <input asp-for="ColorCode" type="color" class="form-control form-control-lg shadow-sm" style="height: 100px;" />
+                </div>
 
-<h4>Subject</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="SubjectId" />
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ColorCode" class="control-label"></label>
-                <input asp-for="ColorCode" class="form-control" />
-                <span asp-validation-for="ColorCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="d-flex justify-content-between mt-5 pt-5 border-top">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5 py-4 fs-2 rounded-4">Назад</a>
+                    <button type="submit" class="btn btn-warning btn-lg px-5 py-4 fs-2 fw-bold rounded-4 shadow">Оновити</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-</body>
-</html>

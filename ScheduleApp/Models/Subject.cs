@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScheduleApp.Models;
 
-public partial class Subject
+public partial class Subject : Entity
 {
     [Display(Name = "ID Предмета")]
     public int SubjectId { get; set; }

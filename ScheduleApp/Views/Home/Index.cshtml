@@ -1,8 +1,57 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using System.Globalization
+@using ScheduleApp.Controllers
+@{
+    ViewData["Title"] = "Розклад";
+    var ukCulture = new CultureInfo("uk-UA");
+    var days = new List<DayOfWeek> { 
+        DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, 
+        DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday 
+    };
+    var gridData = ViewBag.GridData as Dictionary<string, Dictionary<DayOfWeek, List<TimetableGridEntry>>>;
+    var timeSlots = ViewBag.SortedTimeSlots as List<string>;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">📅 Мій Розклад</h2>
+        <a asp-controller="Schedules" asp-action="Create" class="btn btn-primary shadow-sm">Додати заняття</a>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded-3">
+        <table class="table table-bordered bg-white mb-0">
+            <thead class="table-light text-center">
+                <tr>
+                    <th style="width: 100px;">Час</th>
+                    @foreach (var day in days)
+                    {
+                        <th>@ukCulture.DateTimeFormat.GetDayName(day)</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var slot in timeSlots)
+                {
+                    <tr>
+                        <td class="text-center align-middle fw-bold text-primary">@slot</td>
+                        @foreach (var day in days)
+                        {
+                            <td class="p-2 align-top" style="min-height: 100px; width: 13%;">
+                                @if (gridData != null && gridData.ContainsKey(slot) && gridData[slot].ContainsKey(day))
+                                {
+                                    @foreach (var entry in gridData[slot][day])
+                                    {
+                                        <div class="p-2 mb-2 rounded border-start border-4" 
+                                             style="background-color: @entry.SubjectColorBackground; border-color: @entry.SubjectColorAccent !important;">
+                                            <div class="fw-bold small">@entry.Record.Subject?.Name</div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">@entry.Record.Teacher?.FullName</div>
+                                        </div>
+                                    }
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

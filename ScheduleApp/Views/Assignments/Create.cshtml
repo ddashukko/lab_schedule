@@ -1,51 +1,45 @@
 @model ScheduleApp.Models.Assignment
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Нове завдання";
 }
 
-<!DOCTYPE html>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-5">
+        <div class="card-header bg-primary text-white p-5 rounded-top-5">
+            <h1 class="display-3 fw-bold mb-0">🆕 Створити нове завдання</h1>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger h3"></div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
-</head>
-<body>
+                <div class="mb-5">
+                    <label asp-for="SubjectId" class="h1 fw-bold mb-3">Предмет</label>
+                    <div class="input-group">
+                        <select asp-for="SubjectId" class="form-select form-select-lg py-4 fs-2 shadow-sm" asp-items="ViewBag.SubjectId">
+                            <option value="">-- Оберіть предмет із списку --</option>
+                        </select>
+                        <a asp-controller="Subjects" asp-action="Create" target="_blank" class="btn btn-outline-success px-5 d-flex align-items-center fs-2" title="Створити новий предмет">+ Новий</a>
+                    </div>
+                </div>
 
-<h4>Assignment</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class ="form-control" asp-items="ViewBag.SubjectId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Deadline" class="control-label"></label>
-                <input asp-for="Deadline" class="form-control" />
-                <span asp-validation-for="Deadline" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="mb-5">
+                    <label asp-for="Description" class="h1 fw-bold mb-3">Опис завдання</label>
+                    <textarea asp-for="Description" class="form-control form-control-lg py-4 fs-2 shadow-sm" rows="4" placeholder="Що саме потрібно зробити?"></textarea>
+                    <span asp-validation-for="Description" class="text-danger h4"></span>
+                </div>
+
+                <div class="mb-5">
+                    <label asp-for="Deadline" class="h1 fw-bold mb-3">Граничний термін (Дедлайн)</label>
+                    <input asp-for="Deadline" class="form-control form-control-lg py-4 fs-2 shadow-sm" type="datetime-local" />
+                    <span asp-validation-for="Deadline" class="text-danger h4"></span>
+                </div>
+
+                <div class="d-flex justify-content-between mt-5 pt-5 border-top">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5 py-4 fs-2 rounded-4">До списку</a>
+                    <button type="submit" class="btn btn-success btn-lg px-5 py-4 fs-2 fw-bold rounded-4 shadow">Зберегти завдання</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-</body>
-</html>
