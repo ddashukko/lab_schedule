@@ -18,6 +18,8 @@ public partial class Assignment
     [Display(Name = "Дедлайн")]
     public DateTime? Deadline { get; set; }
 
+    public string Status { get; set; } = "Active";
+
     [Display(Name = "Предмет")]
     public virtual Subject? Subject { get; set; }
 }

@@ -7,11 +7,11 @@ public partial class Schedule
 {
     public int EntryId { get; set; }
 
-    public int? TimetableId { get; set; }
-
     public int? SubjectId { get; set; }
 
     public int? TeacherId { get; set; }
+
+    public string? Link { get; set; }
 
     public DateOnly? StartDate { get; set; }
 
@@ -28,6 +28,4 @@ public partial class Schedule
     public virtual Subject? Subject { get; set; }
 
     public virtual Teacher? Teacher { get; set; }
-
-    public virtual Timetable? Timetable { get; set; }
 }

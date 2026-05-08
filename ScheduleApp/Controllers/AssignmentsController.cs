@@ -16,21 +16,37 @@ public class AssignmentsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var assignments = _context.Assignments.Include(a => a.Subject);
-        return View(await assignments.ToListAsync());
+        var activeAssignments = await _context.Assignments
+            .Include(a => a.Subject)
+            .Where(a => a.Status == "Active")
+            .OrderBy(a => a.Deadline)
+            .ToListAsync();
+            
+        return View(activeAssignments);
     }
 
-    public async Task<IActionResult> Details(int? id)
+    public async Task<IActionResult> Archive()
     {
-        if (id == null) return NotFound();
-
-        var assignment = await _context.Assignments
+        var archivedAssignments = await _context.Assignments
             .Include(a => a.Subject)
-            .FirstOrDefaultAsync(m => m.TaskId == id);
+            .Where(a => a.Status != "Active")
+            .OrderByDescending(a => a.Deadline)
+            .ToListAsync();
+            
+        return View(archivedAssignments);
+    }
 
-        if (assignment == null) return NotFound();
-
-        return View(assignment);
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangeStatus(int id, string status)
+    {
+        var assignment = await _context.Assignments.FindAsync(id);
+        if (assignment != null)
+        {
+            assignment.Status = status;
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
@@ -42,8 +58,10 @@ public class AssignmentsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("TaskId,SubjectId,Description,Deadline")] Assignment assignment)
+    public async Task<IActionResult> Create([Bind("TaskId,SubjectId,Description,Deadline,Status")] Assignment assignment)
     {
+        ModelState.Remove("Subject");
+        
         if (ModelState.IsValid)
         {
             _context.Add(assignment);
@@ -67,9 +85,11 @@ public class AssignmentsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("TaskId,SubjectId,Description,Deadline")] Assignment assignment)
+    public async Task<IActionResult> Edit(int id, [Bind("TaskId,SubjectId,Description,Deadline,Status")] Assignment assignment)
     {
         if (id != assignment.TaskId) return NotFound();
+
+        ModelState.Remove("Subject");
 
         if (ModelState.IsValid)
         {
@@ -83,7 +103,7 @@ public class AssignmentsController : Controller
                 if (!AssignmentExists(assignment.TaskId)) return NotFound();
                 else throw;
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(assignment.Status == "Active" ? nameof(Index) : nameof(Archive));
         }
         ViewData["SubjectId"] = new SelectList(_context.Subjects, "SubjectId", "Name", assignment.SubjectId);
         return View(assignment);
@@ -110,9 +130,9 @@ public class AssignmentsController : Controller
         if (assignment != null)
         {
             _context.Assignments.Remove(assignment);
+            await _context.SaveChangesAsync();
         }
 
-        await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 

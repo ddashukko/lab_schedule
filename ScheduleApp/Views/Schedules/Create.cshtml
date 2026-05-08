@@ -1,93 +1,57 @@
 @model ScheduleApp.Models.Schedule
 
-@{
-    ViewData["Title"] = "Додати заняття";
-}
-
 <div class="container mt-5">
-    <div class="card shadow-lg border-0" style="border-radius: 15px;">
-        <div class="card-header bg-primary text-white p-4" style="border-radius: 15px 15px 0 0;">
-            <h2 class="mb-0 fw-bold"> Створення запису розкладу</h2>
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-header bg-primary text-white p-4">
+            <h2 class="mb-0">➕ Додати заняття</h2>
         </div>
-        <div class="card-body p-5">
+        <div class="card-body p-4">
             <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
                 <div class="row">
-                    <div class="col-md-6 pe-md-5 border-end">
-                        <div class="form-group mb-4">
-                            <label asp-for="TimetableId" class="h4 fw-bold mb-3">Назва розкладу</label>
-                            <select asp-for="TimetableId" class="form-select form-select-lg py-3" asp-items="ViewBag.TimetableId">
-                                <option value="">-- Оберіть розклад --</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label asp-for="SubjectId" class="h4 fw-bold mb-3">Предмет</label>
-                            <div class="input-group input-group-lg">
-                                <select asp-for="SubjectId" class="form-select py-3" asp-items="ViewBag.SubjectId">
-                                    <option value="">-- Оберіть предмет --</option>
-                                </select>
-                                <a asp-controller="Subjects" asp-action="Create" target="_blank" class="btn btn-outline-primary d-flex align-items-center" title="Додати новий предмет">
-                                    <span style="font-size: 1.5rem;">+</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label asp-for="TeacherId" class="h4 fw-bold mb-3">Викладач</label>
-                            <div class="input-group input-group-lg">
-                                <select asp-for="TeacherId" class="form-select py-3" asp-items="ViewBag.TeacherId">
-                                    <option value="">-- Оберіть викладача --</option>
-                                </select>
-                                @* Якщо у тебе ще немає TeachersController, кнопка просто не спрацює поки що *@
-                                <a asp-controller="Teachers" asp-action="Create" target="_blank" class="btn btn-outline-primary d-flex align-items-center" title="Додати нового викладача">
-                                    <span style="font-size: 1.5rem;">+</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label asp-for="RepeatInterval" class="h4 fw-bold mb-3">Повторювати кожні (днів)</label>
-                            <input asp-for="RepeatInterval" class="form-control form-control-lg py-3" type="number" value="@(Model?.RepeatInterval ?? 7)" />
-                            <span asp-validation-for="RepeatInterval" class="text-danger"></span>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Предмет</label>
+                        <div class="input-group">
+                            <select asp-for="SubjectId" class="form-select" asp-items="ViewBag.SubjectId"></select>
+                            <a asp-controller="Subjects" asp-action="Create" target="_blank" class="btn btn-outline-success" title="Додати новий предмет">+ Новий</a>
                         </div>
                     </div>
-
-                    <div class="col-md-6 ps-md-5">
-                        <div class="row">
-                            <div class="col-6 mb-4">
-                                <label asp-for="StartDate" class="h4 fw-bold mb-3">Дата від</label>
-                                <input asp-for="StartDate" class="form-control form-control-lg py-3" type="date" />
-                            </div>
-                            <div class="col-6 mb-4">
-                                <label asp-for="EndDate" class="h4 fw-bold mb-3">Дата до</label>
-                                <input asp-for="EndDate" class="form-control form-control-lg py-3" type="date" />
-                            </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Викладач</label>
+                        <div class="input-group">
+                            <select asp-for="TeacherId" class="form-select" asp-items="ViewBag.TeacherId"></select>
+                            <a asp-controller="Teachers" asp-action="Create" target="_blank" class="btn btn-outline-success" title="Додати нового викладача">+ Новий</a>
                         </div>
-
-                        <div class="row">
-                            <div class="col-6 mb-4">
-                                <label asp-for="TimeStart" class="h4 fw-bold mb-3">Час початку</label>
-                                <input asp-for="TimeStart" class="form-control form-control-lg py-3" type="time" />
-                            </div>
-                            <div class="col-6 mb-4">
-                                <label asp-for="TimeFinish" class="h4 fw-bold mb-3">Час кінця</label>
-                                <input asp-for="TimeFinish" class="form-control form-control-lg py-3" type="time" />
-                            </div>
-                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="fw-bold">🔗 Посилання на пару</label>
+                        <input asp-for="Link" class="form-control" placeholder="https://..." />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">День (Дата початку)</label>
+                        <input asp-for="StartDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Дата кінця (до якого числа)</label>
+                        <input asp-for="EndDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold">Час початку</label>
+                        <input asp-for="TimeStart" type="time" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold">Час кінця</label>
+                        <input asp-for="TimeFinish" type="time" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="fw-bold">Повтор (днів)</label>
+                        <input asp-for="RepeatInterval" type="number" class="form-control" />
                     </div>
                 </div>
-
-                <div class="d-flex justify-content-between mt-5 pt-4 border-top">
-                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5 py-3">Скасувати</a>
-                    <button type="submit" class="btn btn-success btn-lg px-5 py-3 fw-bold">Зберегти розклад</button>
+                <div class="mt-4 text-end">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-light px-4">Скасувати</a>
+                    <button type="submit" class="btn btn-primary px-5">Зберегти</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

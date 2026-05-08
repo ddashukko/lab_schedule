@@ -15,9 +15,6 @@ public partial class Subject : Entity
     [Display(Name = "Назва предмета")]
     public string Name { get; set; } = null!;
 
-    [Display(Name = "Колір (HEX)")]
-    public string? ColorCode { get; set; }
-
     public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
     public virtual ICollection<Note> Notes { get; set; } = new List<Note>();
     public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();

@@ -18,7 +18,6 @@ public class HomeController : Controller
         var allSchedules = await _context.Schedules
             .Include(s => s.Subject)
             .Include(s => s.Teacher)
-            .Include(s => s.Timetable)
             .ToListAsync();
 
         var grid = new Dictionary<string, Dictionary<DayOfWeek, List<TimetableGridEntry>>>();
@@ -40,9 +39,7 @@ public class HomeController : Controller
 
             grid[timeKey][dayKey].Add(new TimetableGridEntry
             {
-                Record = schedule,
-                SubjectColorAccent = schedule.Subject.ColorCode ?? "#723793",
-                SubjectColorBackground = (schedule.Subject.ColorCode ?? "#723793") + "33"
+                Record = schedule
             });
         }
 

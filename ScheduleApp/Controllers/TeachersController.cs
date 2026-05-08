@@ -26,19 +26,16 @@ public class TeachersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("TeacherId,FullName,Link")] Teacher teacher)
+    public async Task<IActionResult> Create([Bind("TeacherId,FullName")] Teacher teacher)
     {
         if (ModelState.IsValid)
         {
-            var existingTeacher = await _context.Teachers
-                .FirstOrDefaultAsync(t => t.FullName == teacher.FullName);
-
+            var existingTeacher = await _context.Teachers.FirstOrDefaultAsync(t => t.FullName == teacher.FullName);
             if (existingTeacher == null)
             {
                 _context.Add(teacher);
                 await _context.SaveChangesAsync();
             }
-            
             return Content("<script>window.close();</script>", "text/html");
         }
         return View(teacher);
@@ -54,7 +51,7 @@ public class TeachersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("TeacherId,FullName,Link")] Teacher teacher)
+    public async Task<IActionResult> Edit(int id, [Bind("TeacherId,FullName")] Teacher teacher)
     {
         if (id != teacher.TeacherId) return NotFound();
         if (ModelState.IsValid)

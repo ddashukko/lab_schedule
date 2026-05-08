@@ -6,7 +6,7 @@ namespace ScheduleApp.Services;
 public class SubjectExportService : IExportService<Subject>
 {
     private readonly IsttpContext _context;
-    private static readonly IReadOnlyList<string> HeaderNames = new[] { "Назва", "Колір (HEX)", "ID Користувача" };
+    private static readonly IReadOnlyList<string> HeaderNames = new[] { "Назва", "ID Користувача" };
 
     public SubjectExportService(IsttpContext context) => _context = context;
 
@@ -26,8 +26,7 @@ public class SubjectExportService : IExportService<Subject>
         foreach (var s in subjects)
         {
             worksheet.Cell(rowIndex, 1).Value = s.Name;
-            worksheet.Cell(rowIndex, 2).Value = s.ColorCode;
-            worksheet.Cell(rowIndex, 3).Value = s.UserId;
+            worksheet.Cell(rowIndex, 2).Value = s.UserId;
             rowIndex++;
         }
         workbook.SaveAs(stream);

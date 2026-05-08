@@ -20,18 +20,16 @@ public class SubjectImportService : IImportService<Subject>
         }
         await _context.SaveChangesAsync(cancellationToken);
     }
-      private Task AddSubjectAsync(IXLRow row, CancellationToken cancellationToken)
+    
+    private Task AddSubjectAsync(IXLRow row, CancellationToken cancellationToken)
     {
-    var name = row.Cell(1).GetValue<string>();
-    var subject = new Subject
-    {
-        Name = name,
-        ColorCode = row.Cell(2).GetValue<string>(),
-        UserId = row.Cell(3).GetValue<int>()
-    };
-    _context.Subjects.Add(subject);
-    return Task.CompletedTask;
+        var name = row.Cell(1).GetValue<string>();
+        var subject = new Subject
+        {
+            Name = name,
+            UserId = row.Cell(2).GetValue<int>()
+        };
+        _context.Subjects.Add(subject);
+        return Task.CompletedTask;
     }
-
-  
 }

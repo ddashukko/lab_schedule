@@ -1,0 +1,53 @@
+@model IEnumerable<ScheduleApp.Models.Assignment>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">🗄️ Архів завдань</h2>
+        <a asp-action="Index" class="btn btn-outline-primary btn-sm shadow-sm">⬅ До активних</a>
+    </div>
+    <div class="card shadow-sm border-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="border-0">Статус</th>
+                    <th class="border-0">Предмет</th>
+                    <th class="border-0">Опис завдання</th>
+                    <th class="border-0">Дедлайн</th>
+                    <th class="border-0 text-end">Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td style="width: 120px;">
+                            @if(item.Status == "Completed") {
+                                <span class="badge bg-success">✅ Виконано</span>
+                            } else {
+                                <span class="badge bg-danger">❌ Не виконано</span>
+                            }
+                        </td>
+                        <td style="width: 200px;">
+                            <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                @(item.Subject?.Name ?? "---")
+                            </span>
+                        </td>
+                        <td class="text-muted text-decoration-line-through">@item.Description</td>
+                        <td class="text-muted" style="width: 150px;">
+                            @item.Deadline?.ToString("dd.MM HH:mm")
+                        </td>
+                        <td class="text-end" style="width: 150px;">
+                            <div class="d-flex justify-content-end gap-1">
+                                <form asp-action="ChangeStatus" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.TaskId" />
+                                    <input type="hidden" name="status" value="Active" />
+                                    <button type="submit" class="btn btn-sm btn-outline-primary" title="Повернути в роботу">🔄</button>
+                                </form>
+                                <a asp-action="Delete" asp-route-id="@item.TaskId" class="btn btn-sm btn-outline-danger" title="Видалити назавжди">🗑️</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

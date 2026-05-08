@@ -19,14 +19,11 @@
                     <span asp-validation-for="Name" class="text-danger h4"></span>
                 </div>
 
-                <div class="mb-5">
-                    <label asp-for="ColorCode" class="h2 fw-bold mb-3">Колір у розкладі</label>
-                    <input asp-for="ColorCode" type="color" class="form-control form-control-lg py-2 shadow-sm" style="height: 100px;" value="#723793" />
-                    <p class="text-muted mt-2 h4">Оберіть колір, яким цей предмет буде виділятися в сітці</p>
-                </div>
-
                 <div class="d-flex justify-content-between mt-5 pt-5 border-top">
-                    <button type="button" onclick="window.close()" class="btn btn-outline-secondary btn-lg px-5 py-4 fw-bold" style="font-size: 1.5rem;">Закрити</button>
+                    <button type="button" 
+                            onclick="window.close(); setTimeout(function(){ window.location.href='/Subjects/Index'; }, 100);" 
+                            class="btn btn-outline-secondary btn-lg px-5 py-4 fw-bold" 
+                            style="font-size: 1.5rem;">Закрити</button>
                     <button type="submit" class="btn btn-success btn-lg px-5 py-4 fw-bold" style="font-size: 1.5rem;">Зберегти предмет</button>
                 </div>
             </form>

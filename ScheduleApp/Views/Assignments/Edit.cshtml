@@ -13,6 +13,7 @@
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger h3"></div>
                 <input type="hidden" asp-for="TaskId" />
+                <input type="hidden" asp-for="Status" />
 
                 <div class="mb-5">
                     <label asp-for="SubjectId" class="h1 fw-bold mb-3">Предмет</label>

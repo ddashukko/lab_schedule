@@ -17,13 +17,6 @@
                 @foreach (var item in Model) {
                     <tr>
                         <td class="fw-bold">@item.FullName</td>
-                        <td>
-                            @if(!string.IsNullOrEmpty(item.Link)) {
-                                <a href="@item.Link" target="_blank" class="text-truncate d-inline-block" style="max-width: 200px;">@item.Link</a>
-                            } else {
-                                <span class="text-muted small">Немає</span>
-                            }
-                        </td>
                         <td class="text-end">
                             <a asp-action="Edit" asp-route-id="@item.TeacherId" class="btn btn-sm btn-outline-warning">Редагувати</a>
                             <a asp-action="Delete" asp-route-id="@item.TeacherId" class="btn btn-sm btn-outline-danger">Видалити</a>

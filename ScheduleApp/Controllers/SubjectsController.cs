@@ -21,12 +21,8 @@ public class SubjectsController : Controller
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null) return NotFound();
-
-        var subject = await _context.Subjects
-            .FirstOrDefaultAsync(m => m.SubjectId == id);
-
+        var subject = await _context.Subjects.FirstOrDefaultAsync(m => m.SubjectId == id);
         if (subject == null) return NotFound();
-
         return View(subject);
     }
 
@@ -38,13 +34,11 @@ public class SubjectsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("SubjectId,Name,ColorCode,UserId")] Subject subject)
+    public async Task<IActionResult> Create([Bind("SubjectId,Name,UserId")] Subject subject)
     {
         if (ModelState.IsValid)
         {
-            var existingSubject = await _context.Subjects
-                .FirstOrDefaultAsync(s => s.Name == subject.Name);
-
+            var existingSubject = await _context.Subjects.FirstOrDefaultAsync(s => s.Name == subject.Name);
             if (existingSubject == null)
             {
                 _context.Add(subject);
@@ -58,16 +52,14 @@ public class SubjectsController : Controller
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
-
         var subject = await _context.Subjects.FindAsync(id);
         if (subject == null) return NotFound();
-        
         return View(subject);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("SubjectId,Name,ColorCode,UserId")] Subject subject)
+    public async Task<IActionResult> Edit(int id, [Bind("SubjectId,Name,UserId")] Subject subject)
     {
         if (id != subject.SubjectId) return NotFound();
 
@@ -91,12 +83,8 @@ public class SubjectsController : Controller
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
-
-        var subject = await _context.Subjects
-            .FirstOrDefaultAsync(m => m.SubjectId == id);
-            
+        var subject = await _context.Subjects.FirstOrDefaultAsync(m => m.SubjectId == id);
         if (subject == null) return NotFound();
-
         return View(subject);
     }
 
@@ -109,7 +97,6 @@ public class SubjectsController : Controller
         {
             _context.Subjects.Remove(subject);
         }
-
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
