@@ -1,50 +1,53 @@
 @model IEnumerable<ScheduleApp.Models.Assignment>
-<div class="container mt-4">
+
+<div class="container-fluid px-4 mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">📝 Активні завдання</h2>
+        <h2 class="fw-bold display-5">📝 Активні завдання</h2>
         <div>
-            <a asp-action="Archive" class="btn btn-outline-secondary btn-sm shadow-sm me-2">🗄️ Архів</a>
-            <a asp-action="Create" class="btn btn-primary btn-sm shadow-sm">Нове завдання</a>
+            <a asp-action="Archive" class="btn btn-outline-secondary btn-lg shadow-sm me-2 fw-bold fs-4">🗄️ Архів</a>
+            <a asp-action="Create" class="btn btn-primary btn-lg shadow-sm fw-bold fs-4">+ Нове завдання</a>
         </div>
     </div>
-    <div class="card shadow-sm border-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="bg-light">
-                <tr>
-                    <th class="border-0">Предмет</th>
-                    <th class="border-0">Опис завдання</th>
-                    <th class="border-0">Дедлайн</th>
-                    <th class="border-0 text-end">Дії</th>
+    
+    <div class="card shadow-sm border-0 rounded-4">
+        <table class="table table-hover mb-0 w-100" style="table-layout: auto !important;">
+            <thead class="table-light fs-4"> <tr>
+                    <th style="width: 25%; padding: 1.5rem;">Предмет</th>
+                    <th style="width: 40%; padding: 1.5rem;">Опис завдання</th>
+                    <th style="width: 15%; padding: 1.5rem;">Дедлайн</th>
+                    <th class="text-end" style="width: 20%; padding: 1.5rem;">Дії</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model) {
                     <tr>
-                        <td style="width: 200px;">
-                            <span class="badge bg-primary rounded-pill px-3 py-2">
+                        <td class="align-middle" style="padding: 1.2rem;">
+                            <span class="badge bg-primary px-4 py-3 fs-5 text-wrap shadow-sm" style="max-width: 100%; text-align: left; line-height: 1.4; border-radius: 12px;">
                                 @(item.Subject?.Name ?? "---")
                             </span>
                         </td>
-                        <td class="text-dark">@item.Description</td>
-                        <td class="fw-bold text-danger" style="width: 150px;">
+                        <td class="text-dark fs-4 align-middle fw-medium" style="word-break: break-word; padding: 1.2rem; line-height: 1.5;">
+                            @item.Description
+                        </td>
+                        <td class="fw-bold text-danger fs-4 align-middle" style="padding: 1.2rem;">
                             @item.Deadline?.ToString("dd.MM HH:mm")
                         </td>
-                        <td class="text-end" style="width: 220px;">
-                            <div class="d-flex justify-content-end gap-1">
-                                <form asp-action="ChangeStatus" method="post">
+                        <td class="text-end align-middle" style="padding: 1.2rem;">
+                            <div class="d-flex justify-content-end gap-2 flex-wrap">
+                                <form asp-action="ChangeStatus" method="post" class="m-0">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="id" value="@item.TaskId" />
                                     <input type="hidden" name="status" value="Completed" />
-                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Виконано">✅</button>
+                                    <button type="submit" class="btn btn-outline-success fw-bold fs-5 px-3 py-2" title="Виконано">✅</button>
                                 </form>
-                                <form asp-action="ChangeStatus" method="post">
+                                <form asp-action="ChangeStatus" method="post" class="m-0">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="id" value="@item.TaskId" />
                                     <input type="hidden" name="status" value="Failed" />
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Не виконано">❌</button>
+                                    <button type="submit" class="btn btn-outline-danger fw-bold fs-5 px-3 py-2" title="Не виконано">❌</button>
                                 </form>
-                                <a asp-action="Edit" asp-route-id="@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Редагувати">✏️</a>
-                                <a asp-action="Delete" asp-route-id="@item.TaskId" class="btn btn-sm btn-outline-danger" title="Видалити">🗑️</a>
+                                <a asp-action="Edit" asp-route-id="@item.TaskId" class="btn btn-outline-secondary fw-bold fs-5 px-3 py-2" title="Редагувати">✏️</a>
+                                <a asp-action="Delete" asp-route-id="@item.TaskId" class="btn btn-outline-danger fw-bold fs-5 px-3 py-2" title="Видалити">🗑️</a>
                             </div>
                         </td>
                     </tr>

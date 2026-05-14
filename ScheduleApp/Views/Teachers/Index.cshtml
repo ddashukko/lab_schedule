@@ -1,25 +1,26 @@
 @model IEnumerable<ScheduleApp.Models.Teacher>
-<div class="container mt-4">
+
+<div class="container-fluid px-4 mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">👨‍🏫 Викладачі</h2>
-        <a asp-action="Create" class="btn btn-primary btn-sm">+ Додати</a>
+        <h2 class="fw-bold display-6">👨‍🏫 Список викладачів</h2>
+        <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">+ Додати викладача</a>
     </div>
-    <div class="card shadow-sm border-0">
-        <table class="table table-hover align-middle mb-0">
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <table class="table table-hover mb-0 w-100">
             <thead class="table-light">
                 <tr>
                     <th>ПІБ Викладача</th>
-                    <th>Посилання</th>
-                    <th class="text-end">Дії</th>
+                    <th class="text-end" style="width: 300px;">Дії</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model) {
                     <tr>
-                        <td class="fw-bold">@item.FullName</td>
-                        <td class="text-end">
-                            <a asp-action="Edit" asp-route-id="@item.TeacherId" class="btn btn-sm btn-outline-warning">Редагувати</a>
-                            <a asp-action="Delete" asp-route-id="@item.TeacherId" class="btn btn-sm btn-outline-danger">Видалити</a>
+                        <td class="fw-bold fs-4 align-middle">@item.FullName</td>
+                        <td class="text-end align-middle">
+                            <a asp-action="Edit" asp-route-id="@item.TeacherId" class="btn btn-outline-warning fw-bold">✏️ Редагувати</a>
+                            <a asp-action="Delete" asp-route-id="@item.TeacherId" class="btn btn-outline-danger fw-bold">🗑️ Видалити</a>
                         </td>
                     </tr>
                 }

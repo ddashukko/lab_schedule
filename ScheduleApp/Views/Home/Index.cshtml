@@ -1,10 +1,14 @@
 ﻿@using ScheduleApp.Controllers
+@using System.Globalization
 @{
     ViewData["Title"] = "Мій Розклад";
     var gridData = ViewBag.GridData as Dictionary<string, Dictionary<DayOfWeek, List<TimetableGridEntry>>> 
                    ?? new Dictionary<string, Dictionary<DayOfWeek, List<TimetableGridEntry>>>();
     var timeSlots = ViewBag.SortedTimeSlots as List<string> ?? new List<string>();
+    var weekDates = ViewBag.WeekDates as Dictionary<DayOfWeek, DateOnly> ?? new Dictionary<DayOfWeek, DateOnly>();
     var days = Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>().Where(d => d != DayOfWeek.Sunday).ToList();
+    var ukCulture = new CultureInfo("uk-UA");
+    var today = DateOnly.FromDateTime(DateTime.Today);
 }
 
 <div class="container-fluid mt-4">
@@ -14,38 +18,51 @@
     </div>
 
     <div class="table-responsive shadow-sm rounded-4">
-        <table class="table table-bordered bg-white mb-0">
+        <table class="table table-bordered bg-white mb-0 schedule-table">
             <thead class="table-light">
                 <tr class="text-center">
-                    <th style="width: 100px;">Час</th>
+                    <th style="width: 100px;" class="align-middle">Час</th>
                     @foreach (var day in days) {
-                        <th>@day.ToString()</th>
+                        string dayName = ukCulture.DateTimeFormat.GetDayName(day);
+                        dayName = char.ToUpper(dayName[0]) + dayName.Substring(1);
+                        var dateForDay = weekDates.ContainsKey(day) ? weekDates[day] : DateOnly.MinValue;
+                        bool isToday = dateForDay == today;
+
+                        <th class="@(isToday ? "bg-primary text-white" : "")" style="padding: 1rem;">
+                            <div class="fs-5 fw-bold mb-1">@dayName</div>
+                            @if (dateForDay != DateOnly.MinValue) {
+                                <div class="small fw-normal @(isToday ? "text-white-50" : "text-muted")">@dateForDay.ToString("dd MMMM", ukCulture)</div>
+                            }
+                        </th>
                     }
                 </tr>
             </thead>
             <tbody>
                 @foreach (var slot in timeSlots) {
                     <tr>
-                        <td class="text-center align-middle fw-bold bg-light">@slot</td>
+                        <td class="text-center align-middle fw-bold bg-light fs-5">@slot</td>
                         @foreach (var day in days) {
-                            <td class="p-2" style="min-width: 150px; height: 100px;">
+                            var dateForDay = weekDates.ContainsKey(day) ? weekDates[day] : DateOnly.MinValue;
+                            bool isToday = dateForDay == today;
+
+                            <td class="p-2 @(isToday ? "bg-primary bg-opacity-10" : "")" style="min-width: 150px; height: 100px;">
                                 @if (gridData.ContainsKey(slot) && gridData[slot].ContainsKey(day)) {
                                     @foreach (var entry in gridData[slot][day]) {
-                                        <div class="schedule-card border-start border-4 border-primary shadow-sm p-2 mb-2 bg-light rounded">
-                                            <div class="d-flex justify-content-between">
-                                                <span class="subject-name text-dark">@entry.Record.Subject?.Name</span>
-                                                <div class="btn-group">
-                                                    <a asp-controller="Schedules" asp-action="Edit" asp-route-id="@entry.Record.EntryId" class="text-warning me-2">✏️</a>
-                                                    <form asp-controller="Schedules" asp-action="Delete" asp-route-id="@entry.Record.EntryId" method="post" onsubmit="return confirm('Видалити?')">
+                                        <div class="schedule-card border-start border-4 border-primary shadow-sm p-2 mb-2 bg-white rounded">
+                                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                                <span class="subject-name text-dark fw-bold lh-sm" style="font-size: 1.1rem;">@entry.Record.Subject?.Name</span>
+                                                <div class="d-flex flex-nowrap gap-2 flex-shrink-0">
+                                                    <a asp-controller="Schedules" asp-action="Edit" asp-route-id="@entry.Record.EntryId" class="text-warning text-decoration-none" style="font-size: 1.3rem;">✏️</a>
+                                                    <form asp-controller="Schedules" asp-action="Delete" asp-route-id="@entry.Record.EntryId" method="post" onsubmit="return confirm('Видалити?')" class="m-0">
                                                         @Html.AntiForgeryToken()
-                                                        <button type="submit" class="border-0 bg-transparent text-danger p-0">🗑️</button>
+                                                        <button type="submit" class="border-0 bg-transparent text-danger p-0" style="font-size: 1.3rem;">🗑️</button>
                                                     </form>
                                                 </div>
                                             </div>
-                                            <div class="teacher-name text-muted small">👤 @entry.Record.Teacher?.FullName</div>
+                                            <div class="teacher-name text-muted mt-2" style="font-size: 0.9rem;">👤 @entry.Record.Teacher?.FullName</div>
                                             
                                             @if (!string.IsNullOrWhiteSpace(entry.Record.Link) && entry.Record.Link.Trim() != "-") {
-                                                <a href="@entry.Record.Link" target="_blank" class="btn btn-sm btn-outline-primary w-100 mt-1" style="font-size: 0.75rem;">🔗 Приєднатися</a>
+                                                <a href="@entry.Record.Link" target="_blank" class="btn btn-outline-primary fw-bold w-100 mt-2 py-1" style="font-size: 0.95rem;">🔗 Приєднатися</a>
                                             }
                                         </div>
                                     }

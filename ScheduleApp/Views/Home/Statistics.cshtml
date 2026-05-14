@@ -2,30 +2,30 @@
     ViewData["Title"] = "Статистика";
 }
 
-<div class="container mt-4">
+<div class="container-fluid px-4 mt-4">
     <div class="text-center mb-5">
-        <h2 class="fw-bold">📊 Аналітика завдань</h2>
-        <p class="text-muted">Статистика по предметах та дедлайнах</p>
+        <h2 class="fw-bold display-3">📊 Аналітика завдань</h2>
+        <p class="text-muted fs-3">Статистика по предметах та статусах виконання</p>
     </div>
     
     <div class="row g-4">
         <div class="col-md-6">
-            <div class="card shadow-sm border-0 rounded-3 p-4">
-                <h5 class="fw-bold text-center mb-3">Розподіл за предметами</h5>
-                <div id="chart_div" style="width: 100%; height: 400px;"></div>
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold text-center mb-4 display-6">Розподіл за предметами</h5>
+                <div id="chart_div" style="width: 100%; height: 600px;"></div>
             </div>
         </div>
         
         <div class="col-md-6">
-            <div class="card shadow-sm border-0 rounded-3 p-4">
-                <h5 class="fw-bold text-center mb-3">Завдання по місяцях</h5>
-                <div id="month_chart_div" style="width: 100%; height: 400px;"></div>
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold text-center mb-4 display-6">Статус виконання завдань</h5>
+                <div id="status_chart_div" style="width: 100%; height: 600px;"></div>
             </div>
         </div>
     </div>
     
-    <div class="text-center mt-5">
-        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Назад до розкладу</a>
+    <div class="text-center mt-5 pt-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-lg fs-2 px-5 py-3 fw-bold rounded-pill">Назад до розкладу</a>
     </div>
 </div>
 
@@ -37,7 +37,7 @@
 
         async function drawCharts() {
             try {
-                // 1. Дані для предметів (Виправлено шлях: прибрано /api)
+                // 1. Дані для предметів
                 const resSubj = await fetch('/Charts/AssignmentsBySubject');
                 if (!resSubj.ok) throw new Error('Помилка завантаження предметів');
                 const dataSubj = await resSubj.json();
@@ -53,39 +53,53 @@
                 const pieOptions = {
                     pieHole: 0.4,
                     colors: ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6610f2'],
-                    chartArea: { width: '100%', height: '80%' },
-                    legend: { position: 'bottom' }
+                    chartArea: { width: '100%', height: '75%' },
+                    legend: { position: 'bottom', textStyle: { fontSize: 26, bold: true } },
+                    pieSliceTextStyle: { fontSize: 28, bold: true },
+                    tooltip: { textStyle: { fontSize: 24 } },
+                    fontSize: 24
                 };
 
                 new google.visualization.PieChart(document.getElementById('chart_div')).draw(dataTableSubj, pieOptions);
 
-                // 2. Дані для місяців (Виправлено шлях: прибрано /api)
-                const resMonth = await fetch('/Charts/AssignmentsByMonth');
-                if (!resMonth.ok) throw new Error('Помилка завантаження місяців');
-                const dataMonth = await resMonth.json();
+                // 2. Дані для статусів виконання
+                const resStatus = await fetch('/Charts/AssignmentsByStatus');
+                if (!resStatus.ok) throw new Error('Помилка завантаження статусів');
+                const dataStatus = await resStatus.json();
 
-                let dataTableMonth = new google.visualization.DataTable();
-                dataTableMonth.addColumn('string', 'Місяць');
-                dataTableMonth.addColumn('number', 'Завдання');
-                
-                dataMonth.forEach(item => {
-                    dataTableMonth.addRow([item.monthName, item.count]);
+                let dataTableStatus = new google.visualization.DataTable();
+                dataTableStatus.addColumn('string', 'Статус');
+                dataTableStatus.addColumn('number', 'Кількість');
+                dataTableStatus.addColumn({ type: 'string', role: 'style' }); // Додаємо колонку для кольору стовпця
+
+                // Словник для перекладу статусів та їх кольорів
+                const statusMap = {
+                    'Active': { name: 'В процесі ⏳', color: '#0d6efd' }, // Синій
+                    'Completed': { name: 'Виконано ✅', color: '#198754' }, // Зелений
+                    'Failed': { name: 'Не виконано ❌', color: '#dc3545' }  // Червоний
+                };
+
+                dataStatus.forEach(item => {
+                    // Якщо статус невідомий (наприклад старі дані), даємо сірий колір
+                    let mapped = statusMap[item.status] || { name: item.status, color: '#6c757d' };
+                    dataTableStatus.addRow([mapped.name, item.count, mapped.color]);
                 });
 
                 const barOptions = {
                     legend: 'none',
-                    colors: ['#0d6efd'],
-                    chartArea: { width: '80%', height: '70%' },
-                    vAxis: { minValue: 0, gridlines: { count: 4 } },
-                    hAxis: { slantedText: true }
+                    chartArea: { width: '85%', height: '70%' },
+                    vAxis: { minValue: 0, gridlines: { count: 4 }, textStyle: { fontSize: 24, bold: true } },
+                    hAxis: { textStyle: { fontSize: 26, bold: true } },
+                    tooltip: { textStyle: { fontSize: 24 } },
+                    fontSize: 24
                 };
 
-                new google.visualization.ColumnChart(document.getElementById('month_chart_div')).draw(dataTableMonth, barOptions);
+                new google.visualization.ColumnChart(document.getElementById('status_chart_div')).draw(dataTableStatus, barOptions);
 
             } catch (error) {
                 console.error("Помилка завантаження діаграм:", error);
                 document.querySelectorAll('[id*="chart_div"]').forEach(el => {
-                    el.innerHTML = '<div class="alert alert-warning m-3">Не вдалося завантажити дані для діаграми</div>';
+                    el.innerHTML = '<div class="alert alert-warning m-3 fs-3 fw-bold">Не вдалося завантажити дані для діаграми</div>';
                 });
             }
         }

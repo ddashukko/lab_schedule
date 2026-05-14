@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScheduleApp.Models;
+using System.Globalization;
 
 namespace ScheduleApp.Controllers;
 
@@ -14,19 +15,31 @@ public class ChartsController : Controller
     }
 
     [HttpGet]
-    public async Task<JsonResult> AssignmentsBySubject()
+    public async Task<IActionResult> AssignmentsBySubject()
     {
-        // Спочатку витягуємо дані
-        var assignments = await _context.Assignments
+        var data = await _context.Assignments
             .Include(a => a.Subject)
+            .GroupBy(a => a.Subject.Name)
+            .Select(g => new {
+                subjectName = g.Key ?? "Без предмета",
+                count = g.Count()
+            })
             .ToListAsync();
 
-        // Потім групуємо (щоб PostgreSQL не видавав помилок)
+        return Json(data);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> AssignmentsByMonth()
+    {
+        var assignments = await _context.Assignments
+            .Where(a => a.Deadline.HasValue)
+            .ToListAsync();
+
         var data = assignments
-            .GroupBy(a => a.Subject?.Name ?? "Без предмета")
-            .Select(g => new
-            {
-                subjectName = g.Key,
+            .GroupBy(a => a.Deadline.Value.Month)
+            .Select(g => new {
+                monthName = CultureInfo.GetCultureInfo("uk-UA").DateTimeFormat.GetMonthName(g.Key),
                 count = g.Count()
             })
             .ToList();
@@ -35,25 +48,15 @@ public class ChartsController : Controller
     }
 
     [HttpGet]
-    public async Task<JsonResult> AssignmentsByMonth()
+    public async Task<IActionResult> AssignmentsByStatus()
     {
-        // Витягуємо лише ті, де є дедлайн
-        var assignments = await _context.Assignments
-            .Where(a => a.Deadline.HasValue)
-            .ToListAsync();
-
-        var ukCulture = new System.Globalization.CultureInfo("uk-UA");
-
-        var data = assignments
-            .GroupBy(a => a.Deadline!.Value.ToString("MMMM", ukCulture))
-            .Select(g => new
-            {
-                monthName = g.Key,
-                count = g.Count(),
-                monthOrder = g.First().Deadline!.Value.Month
+        var data = await _context.Assignments
+            .GroupBy(a => a.Status)
+            .Select(g => new {
+                status = g.Key ?? "Active",
+                count = g.Count()
             })
-            .OrderBy(r => r.monthOrder)
-            .ToList();
+            .ToListAsync();
 
         return Json(data);
     }

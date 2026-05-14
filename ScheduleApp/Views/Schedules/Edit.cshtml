@@ -1,6 +1,6 @@
 @model ScheduleApp.Models.Schedule
 
-<div class="container mt-5">
+<div class="container-fluid px-4 mt-5">
     <div class="card shadow border-0 rounded-4">
         <div class="card-header bg-warning p-4">
             <h2 class="mb-0">✏️ Редагувати заняття</h2>
@@ -35,18 +35,28 @@
                         <label class="fw-bold">Дата кінця (до якого числа)</label>
                         <input asp-for="EndDate" type="date" class="form-control" />
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="fw-bold">Час початку</label>
-                        <input asp-for="TimeStart" type="time" class="form-control" />
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-bold">Оберіть пару</label>
+                        <select class="form-select" id="pairSelect" onchange="updateTimes()">
+                            <option value="08:40|10:15">1 пара (08:40 - 10:15)</option>
+                            <option value="10:35|12:10">2 пара (10:35 - 12:10)</option>
+                            <option value="12:20|13:55">3 пара (12:20 - 13:55)</option>
+                            <option value="14:05|16:40">4 пара (14:05 - 16:40)</option>
+                        </select>
+                        <input type="hidden" asp-for="TimeStart" id="hiddenStartTime" />
+                        <input type="hidden" asp-for="TimeFinish" id="hiddenEndTime" />
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="fw-bold">Час кінця</label>
-                        <input asp-for="TimeFinish" type="time" class="form-control" />
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="fw-bold">Повтор (днів)</label>
-                        <input asp-for="RepeatInterval" type="number" class="form-control" />
-                    </div>
+                    <div class="col-md-6 mb-3">
+    <label class="fw-bold">Повтор (днів)</label>
+    <input asp-for="RepeatInterval" type="number" min="1" class="form-control" 
+           data-val="true"
+           data-val-number="Будь ласка, введіть коректне число."
+           data-val-range="Інтервал не може бути від'ємним."
+           data-val-range-min="0"
+           data-val-range-max="365"
+           oninput="if(this.value < 0) this.value = '';" />
+    <span asp-validation-for="RepeatInterval" class="text-danger fw-bold mt-1 d-block"></span>
+</div>
                 </div>
                 <div class="mt-4 text-end">
                     <a asp-controller="Home" asp-action="Index" class="btn btn-light px-4">Скасувати</a>
@@ -56,3 +66,30 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function updateTimes() {
+            let times = document.getElementById('pairSelect').value.split('|');
+            document.getElementById('hiddenStartTime').value = times[0] + ":00";
+            document.getElementById('hiddenEndTime').value = times[1] + ":00";
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentStart = document.getElementById('hiddenStartTime').value;
+            
+            if(currentStart) {
+                let formattedStart = currentStart.substring(0, 5); 
+                let select = document.getElementById('pairSelect');
+                
+                for(let i = 0; i < select.options.length; i++) {
+                    if(select.options[i].value.startsWith(formattedStart)) {
+                        select.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+        });
+    </script>
+}

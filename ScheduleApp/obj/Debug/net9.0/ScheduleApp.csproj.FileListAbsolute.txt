@@ -171,8 +171,6 @@ C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compress
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\o7x9d6kaqk-muycvpuwrr.gz
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\a46abjcysm-87fc7y1x7t.gz
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\57yh6ks3n0-mlv21k5csn.gz
-C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\4titpw07hh-zwnmek0pli.gz
-C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\wkbwdemtbm-zwnmek0pli.gz
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\staticwebassets.development.json
@@ -336,4 +334,6 @@ C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\bin\Debug\net9.0\ExcelNum
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\bin\Debug\net9.0\RBush.dll
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\bin\Debug\net9.0\SixLabors.Fonts.dll
 C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\bin\Debug\net9.0\System.IO.Packaging.dll
-C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\3fupkzyaxp-bxjwny7wia.gz
+C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\4titpw07hh-pv9tihqo1v.gz
+C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\wkbwdemtbm-pv9tihqo1v.gz
+C:\Users\TUF\Desktop\коди\oop\schedule\ScheduleApp\obj\Debug\net9.0\compressed\3fupkzyaxp-r7cqvez0dk.gz

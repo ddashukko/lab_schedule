@@ -15,6 +15,17 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
+        DateTime today = DateTime.Today;
+        int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
+        DateTime startOfWeek = today.AddDays(-1 * diff).Date;
+
+        var weekDates = new Dictionary<DayOfWeek, DateOnly>();
+        for (int i = 0; i < 6; i++)
+        {
+            DateTime dt = startOfWeek.AddDays(i);
+            weekDates[dt.DayOfWeek] = DateOnly.FromDateTime(dt);
+        }
+
         var allSchedules = await _context.Schedules
             .Include(s => s.Subject)
             .Include(s => s.Teacher)
@@ -25,26 +36,50 @@ public class HomeController : Controller
 
         foreach (var schedule in allSchedules)
         {
-            if (schedule.Subject == null) continue;
+            if (schedule.Subject == null || schedule.StartDate == null) continue;
 
             string startTime = schedule.TimeStart?.ToString("HH:mm") ?? "00:00";
             string finishTime = schedule.TimeFinish?.ToString("HH:mm") ?? "00:00";
             string timeKey = $"{startTime}-{finishTime}";
-            uniqueTimeSlots.Add(timeKey);
 
-            DayOfWeek dayKey = schedule.StartDate?.DayOfWeek ?? DayOfWeek.Monday;
-
-            if (!grid.ContainsKey(timeKey)) grid[timeKey] = new Dictionary<DayOfWeek, List<TimetableGridEntry>>();
-            if (!grid[timeKey].ContainsKey(dayKey)) grid[timeKey][dayKey] = new List<TimetableGridEntry>();
-
-            grid[timeKey][dayKey].Add(new TimetableGridEntry
+            foreach (var dayKvp in weekDates)
             {
-                Record = schedule
-            });
+                DayOfWeek dayOfWeek = dayKvp.Key;
+                DateOnly currentDate = dayKvp.Value;
+
+                if (currentDate >= schedule.StartDate.Value && 
+                    (schedule.EndDate == null || currentDate <= schedule.EndDate.Value))
+                {
+                    int daysPassed = currentDate.DayNumber - schedule.StartDate.Value.DayNumber;
+                    bool shouldAdd = false;
+
+                    if ((schedule.RepeatInterval == null || schedule.RepeatInterval == 0) && daysPassed == 0)
+                    {
+                        shouldAdd = true;
+                    }
+                    else if (schedule.RepeatInterval > 0 && daysPassed % schedule.RepeatInterval == 0)
+                    {
+                        shouldAdd = true;
+                    }
+
+                    if (shouldAdd)
+                    {
+                        uniqueTimeSlots.Add(timeKey);
+                        if (!grid.ContainsKey(timeKey)) grid[timeKey] = new Dictionary<DayOfWeek, List<TimetableGridEntry>>();
+                        if (!grid[timeKey].ContainsKey(dayOfWeek)) grid[timeKey][dayOfWeek] = new List<TimetableGridEntry>();
+
+                        grid[timeKey][dayOfWeek].Add(new TimetableGridEntry
+                        {
+                            Record = schedule
+                        });
+                    }
+                }
+            }
         }
 
         ViewBag.GridData = grid;
         ViewBag.SortedTimeSlots = uniqueTimeSlots.OrderBy(s => s).ToList();
+        ViewBag.WeekDates = weekDates;
 
         return View();
     }
